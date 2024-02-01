@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.get('/',async(req,res,next)=>{
     try {
-        const data = await pool.query('SELECT * FROM books')
+        const data = await pool.query('SELECT * FROM book')
         res.status(200).json({message:'this is your all data',data:data.rows})
     } catch (error) {
         next(error)
@@ -19,7 +19,7 @@ app.get('/',async(req,res,next)=>{
 app.get('/:id',async(req,res)=>{
     try {
         const{id}=req.params
-        const data = await pool.query('SELECT * FROM books WHERE id=$1',[id])
+        const data = await pool.query('SELECT * FROM book WHERE id=$1',[id])
         res.status(200).json({message:'your singal data get',data:data.rows})
     } catch (error) {
         console.log(error)
@@ -31,11 +31,10 @@ app.post('/',async(req,res)=>{
     try {
         const{name,description}=req.body
         const id = uuidv4()
-        const mydata = await pool.query("INSERT INTO books (id,name,description) VALUES ($1, $2, $3)RETURNING *",[id,name,description])
-        console.log(mydata)
+        const mydata = await pool.query("INSERT INTO book (id,name,description) VALUES ($1, $2, $3)RETURNING *",[id,name,description])
         res.status(201).json({message:'your data is added',data:mydata.rows})
     } catch (err) {
-        console.log(err)
+        console.log('my error',err)
     }
 })
 
@@ -43,7 +42,7 @@ app.put('/:id',async(req,res)=>{
     try {
         const{id}=req.params
         const{name,description}=req.body;
-        const mydata = await pool.query('UPDATE books SET name=$1, description=$2  WHERE id=$3 RETURNING *',
+        const mydata = await pool.query('UPDATE book SET name=$1, description=$2  WHERE id=$3 RETURNING *',
         [name,description,id])
         res.status(200).json({message:'your info is updated',data:mydata.rows})
     } catch (error) {
@@ -55,7 +54,7 @@ app.put('/:id',async(req,res)=>{
 app.delete('/:id',async(req,res)=>{
     try {
         const{id}=req.params
-         await pool.query('DELETE FROM books WHERE id=$1',[id])
+         await pool.query('DELETE FROM book WHERE id=$1',[id])
         res.status(200).json({message:'your info is deleted'})
     } catch (error) {
         console.log(error)

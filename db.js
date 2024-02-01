@@ -1,11 +1,11 @@
-const gada =require('pg').Pool;
+const Pool = require('pg').Pool
 
-const pool = new gada({
+const pool = new Pool({
   host: 'localhost',
   port:5432,
   user: 'postgres',
   database:"bookdb",
-  password:'react2022',
+  password:'password',
 });
 
 pool.connect((err)=>{
